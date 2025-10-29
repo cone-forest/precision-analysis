@@ -1,0 +1,10 @@
+^C:\USERS\USER\DESKTOP\PRECISION-ANALYSIS\BUILD\CMAKEFILES\3EB2C40D50764BD1C024C863C645E249\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/User/Desktop/precision-analysis -BC:/Users/User/Desktop/precision-analysis/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/User/Desktop/precision-analysis/build/pybind11_example.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

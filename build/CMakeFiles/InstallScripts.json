@@ -1,0 +1,12 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/User/Desktop/precision-analysis/build/cmake_install.cmake",
+		"C:/Users/User/Desktop/precision-analysis/build/extern/pybind11/cmake_install.cmake",
+		"C:/Users/User/Desktop/precision-analysis/build/extern/eigen/cmake_install.cmake",
+		"C:/Users/User/Desktop/precision-analysis/build/extern/eigen/unsupported/cmake_install.cmake",
+		"C:/Users/User/Desktop/precision-analysis/build/extern/eigen/unsupported/Eigen/cmake_install.cmake",
+		"C:/Users/User/Desktop/precision-analysis/build/extern/eigen/unsupported/Eigen/CXX11/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
