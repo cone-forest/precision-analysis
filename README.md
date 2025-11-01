@@ -1,6 +1,6 @@
-Склонировать репозиторий с обновлением submodules GitHub:
+Скачать библиотеку Eigen для работы SDK
 ```bash
-git clone --recurse-submodules https://github.com/citec-spbu/precision-analysis.git
+git submodule update --init --recursive
 ```
 Собрать проект:
 ```bash
