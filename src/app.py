@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 from functions_call import get_error_data
+import sys
 
 
 class SimpleApp:
@@ -11,6 +12,7 @@ class SimpleApp:
         self.root = root
         self.root.title("Precision analysis")
         root.state('zoomed')
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         main_frame = tk.Frame(root)
         main_frame.pack(fill='both', expand=True)
@@ -47,6 +49,12 @@ class SimpleApp:
         self.first_input = True
         
         self.create_widgets()
+    
+
+    def on_closing(self):
+        plt.close('all')
+        self.root.destroy()    
+        sys.exit(0)
     
 
     def create_widgets(self):
@@ -98,8 +106,6 @@ class SimpleApp:
         self.submit_btn.pack(pady=10)
         
 
-    
-
     def create_plot_areas(self):
         translation_label = ttk.Label(self.content, text="Translation Errors", font=('Arial', 12, 'bold'))
         translation_label.pack(pady=(10, 5))
@@ -110,7 +116,6 @@ class SimpleApp:
         rotation_label.pack(pady=(20, 5))
         
         self.create_scrollable_plot_area("rotation")
-
 
 
     def create_scrollable_plot_area(self, area_type):
