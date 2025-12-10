@@ -27,7 +27,7 @@ class SimpleApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Precision analysis")
-        # root.state('zoomed') # comment on linux
+        root.state('zoomed') # comment on linux
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         main_frame = tk.Frame(root)
