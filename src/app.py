@@ -5,13 +5,29 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 from functions_call import get_error_data
 import sys
+import tempfile
+import os
+
+try:
+    from perlin_noise import process_perlin_file
+    HAS_PERLIN = True
+except ImportError:
+    print("Файл perlin_noise.py не найден")
+    HAS_PERLIN = False
+
+try:
+    from gause_noise import process_gaussian_file
+    HAS_GAUSSIAN = True
+except ImportError:
+    print("Файл gause_noise.py не найден")
+    HAS_GAUSSIAN = False
 
 
 class SimpleApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Precision analysis")
-        root.state('zoomed') # comment on linux
+        # root.state('zoomed') # comment on linux
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         main_frame = tk.Frame(root)
@@ -47,6 +63,23 @@ class SimpleApp:
         self.shah_var = tk.IntVar()
 
         self.first_input = True
+
+        self.add_noise_var = tk.BooleanVar(value=False)
+        self.noise_type_var = tk.StringVar()
+        self.noise_level_var = tk.DoubleVar(value=0.5)
+        
+        self.noise_settings_frame = None
+        
+        self.available_noise_types = []
+        if HAS_PERLIN:
+            self.available_noise_types.append("Perlin Noise")
+        if HAS_GAUSSIAN:
+            self.available_noise_types.append("Gaussian Noise")
+        
+        if self.available_noise_types:
+            self.noise_type_var.set(self.available_noise_types[0])
+        else:
+            self.add_noise_var.set(False)
         
         self.create_widgets()
     
@@ -97,14 +130,71 @@ class SimpleApp:
 
         shah_check = tk.Checkbutton(self.content, text="shah", variable=self.shah_var)
         shah_check.pack()
+
+        noise_check = tk.Checkbutton(
+            self.content, 
+            text="Добавить шум к данным", 
+            variable=self.add_noise_var,
+            command=self.toggle_noise_settings
+        )
+        noise_check.pack(pady=(10, 5))
         
+        self.noise_settings_frame = ttk.Frame(self.content)
+        
+        noise_type_label = ttk.Label(self.noise_settings_frame, text="Тип шума:")
+        noise_type_label.grid(row=0, column=0, padx=(10, 5), pady=5, sticky="w")
+        
+        noise_type_combo = ttk.Combobox(
+            self.noise_settings_frame,
+            textvariable=self.noise_type_var,
+            values=self.available_noise_types,
+            state="readonly",
+            width=20
+        )
+        noise_type_combo.grid(row=0, column=1, padx=5, pady=5, sticky="w")
+        
+        if not self.available_noise_types:
+            noise_type_combo.config(state="disabled")
+            ttk.Label(self.noise_settings_frame, 
+                     text="Файлы шума не найдены", 
+                     foreground="red").grid(row=0, column=2, padx=10, pady=5)
+        
+        noise_level_label = ttk.Label(self.noise_settings_frame, text="Уровень шума:")
+        noise_level_label.grid(row=1, column=0, padx=(10, 5), pady=5, sticky="w")
+        
+        noise_level_scale = ttk.Scale(
+            self.noise_settings_frame,
+            from_=0.0,
+            to=1.0,
+            variable=self.noise_level_var,
+            orient="horizontal",
+            length=200
+        )
+        noise_level_scale.grid(row=1, column=1, padx=5, pady=5, sticky="w")
+        
+        self.noise_level_value_label = ttk.Label(self.noise_settings_frame, text="0.50")
+        self.noise_level_value_label.grid(row=1, column=2, padx=5, pady=5, sticky="w")
+        
+        def update_noise_label(*args):
+            self.noise_level_value_label.config(text=f"{self.noise_level_var.get():.2f}")
+        
+        self.noise_level_var.trace_add("write", update_noise_label)
+        
+        self.toggle_noise_settings()
+
         self.submit_btn = ttk.Button(
             self.content,
             text="Выполнить",
             command=self.run_methods
         )
         self.submit_btn.pack(pady=10)
-        
+    
+
+    def toggle_noise_settings(self):
+        if self.add_noise_var.get() and self.available_noise_types:
+            self.noise_settings_frame.pack(pady=10, padx=10, fill=tk.X)
+        else:
+            self.noise_settings_frame.pack_forget()
 
     def create_plot_areas(self):
         translation_label = ttk.Label(self.content, text="Translation Errors", font=('Arial', 12, 'bold'))
@@ -244,6 +334,7 @@ class SimpleApp:
             messagebox.showinfo("Успех", f"График сохранен как {filename}")
     
 
+
     def run_methods(self):
         methods = [
             name for name, var in [
@@ -263,18 +354,79 @@ class SimpleApp:
             messagebox.showwarning("Предупреждение", "Пожалуйста, выберите хотя бы один метод!")
             return
         
-        t_data, r_data = get_error_data(methods, self.file1_path, self.file2_path)
+        file_to_compare = self.file2_path
+        temp_file_path = None
         
-        messagebox.showinfo("Информация", "Файлы загружены! Генерация графиков...")
-        
-        sample_plot_t = self.create_plots(t_data, 't')
-        sample_plot_r = self.create_plots(r_data, 'r')
-        if self.first_input:
-            self.create_plot_areas()
-            self.first_input = False
+        if self.add_noise_var.get() and self.available_noise_types:
+            try:
+                # Файлы с шумом будут сохраняться в другой файл
+                # То есть, не получится сделать так, чтобы шум был применен
+                # к уже якобы измененному файлу
+                # Изначальный файл не меняется, для шума создается отдельный
+                temp_file = tempfile.NamedTemporaryFile(mode='w', suffix='_noisy.txt', delete=False)
+                temp_file_path = temp_file.name
+                temp_file.close()
+                
+                noise_level = self.noise_level_var.get()
+                noise_type = self.noise_type_var.get()
+                
+                if noise_type == "Perlin Noise" and HAS_PERLIN:
+                    print(noise_level)
+                    pos_scale = 20 * noise_level
+                    rot_scale = 0.5 * noise_level
+                    
+                    process_perlin_file(
+                        input_file=self.file2_path,
+                        output_file=temp_file_path,
+                        pos_scale=pos_scale,
+                        rot_scale=rot_scale
+                    )
+                    messagebox.showinfo("Информация", 
+                                      f"Шум Перлина применён (уровень: {noise_level:.2f})")
+                    
+                elif noise_type == "Gaussian Noise" and HAS_GAUSSIAN:
+                    pos_std = 20 * noise_level
+                    rot_std = 0.5 * noise_level
+                    
+                    process_gaussian_file(
+                        input_file=self.file2_path,
+                        output_file=temp_file_path,
+                        pos_std=pos_std,
+                        rot_std=rot_std
+                    )
+                    messagebox.showinfo("Информация", 
+                                      f"Гауссовский шум применён (уровень: {noise_level:.2f})")
+                else:
+                    messagebox.showerror("Ошибка", "Выбранный тип шума недоступен")
+                    return
+                
+                file_to_compare = temp_file_path
+                
+            except Exception as e:
+                messagebox.showerror("Ошибка", f"Не удалось применить шум: {str(e)}")
+                if temp_file_path and os.path.exists(temp_file_path):
+                    os.unlink(temp_file_path)
+                return
+        try:
+            t_data, r_data = get_error_data(methods, self.file1_path, file_to_compare)
+            
+            messagebox.showinfo("Информация", "Файлы загружены! Генерация графиков...")
+            
+            sample_plot_t = self.create_plots(t_data, 't')
+            sample_plot_r = self.create_plots(r_data, 'r')
+            if self.first_input:
+                self.create_plot_areas()
+                self.first_input = False
 
-        self.display_plots(sample_plot_t, "translation")
-        self.display_plots(sample_plot_r, "rotation")
+            self.display_plots(sample_plot_t, "translation")
+            self.display_plots(sample_plot_r, "rotation")
+            
+        except Exception as e:
+            messagebox.showerror("Ошибка", f"Ошибка при анализе данных: {str(e)}")
+        finally:
+            # Удаление временного файла, если он был создан
+            if temp_file_path and os.path.exists(temp_file_path):
+                os.unlink(temp_file_path)
 
 
 if __name__ == "__main__":

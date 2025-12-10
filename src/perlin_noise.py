@@ -13,7 +13,7 @@ class PerlinNoise:
         total, amplitude, max_amp, freq = 0.0, 1.0, 0.0, frequency
         for _ in range(octaves):
             total += pnoise3(x * freq, y * freq, z * freq, 
-                           octaves=1, repeat=False, base=self.seed) * amplitude
+                           octaves=1, repeatx=False, base=self.seed) * amplitude
             max_amp += amplitude
             amplitude *= persistence
             freq *= 2
@@ -64,7 +64,7 @@ def noisy_robot_generator(input_file, pos_scale=5.0, rot_scale=0.05, octaves=4, 
                 continue
 
 
-    def process_perlin_file(input_file, output_file, pos_scale=0, rot_scale=0, octaves=4, persistence=0.5, seed=42):
+def process_perlin_file(input_file, output_file, pos_scale=0, rot_scale=0, octaves=4, persistence=0.5, seed=42):
     """Обрабатывает файл построчно и сохраняет результат"""
     with open(output_file, 'w') as out_f:
         for noisy_line in noisy_robot_generator(input_file, pos_scale, rot_scale, octaves, persistence, seed):
