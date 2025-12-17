@@ -22,7 +22,6 @@ except ImportError:
     print("Файл gause_noise.py не найден")
     HAS_GAUSSIAN = False
 
-
 class SimpleApp:
     def __init__(self, root):
         self.root = root
@@ -188,7 +187,6 @@ class SimpleApp:
             command=self.run_methods
         )
         self.submit_btn.pack(pady=10)
-    
 
     def toggle_noise_settings(self):
         if self.add_noise_var.get() and self.available_noise_types:
@@ -206,7 +204,6 @@ class SimpleApp:
         rotation_label.pack(pady=(20, 5))
         
         self.create_scrollable_plot_area("rotation")
-
 
     def create_scrollable_plot_area(self, area_type):
         container = ttk.Frame(self.content)
@@ -333,8 +330,6 @@ class SimpleApp:
             fig.savefig(filename, dpi=300, bbox_inches='tight')
             messagebox.showinfo("Успех", f"График сохранен как {filename}")
     
-
-
     def run_methods(self):
         methods = [
             name for name, var in [
@@ -354,6 +349,18 @@ class SimpleApp:
             messagebox.showwarning("Предупреждение", "Пожалуйста, выберите хотя бы один метод!")
             return
         
+        t_data, r_data = get_error_data(methods, self.file1_path, self.file2_path)
+        
+        messagebox.showinfo("Информация", "Файлы загружены! Генерация графиков...")
+        
+        sample_plot_t = self.create_plots(t_data, 't')
+        sample_plot_r = self.create_plots(r_data, 'r')
+        if self.first_input:
+            self.create_plot_areas()
+            self.first_input = False
+
+        self.display_plots(sample_plot_t, "translation")
+        self.display_plots(sample_plot_r, "rotation")
         file_to_compare = self.file2_path
         temp_file_path = None
         
@@ -427,7 +434,6 @@ class SimpleApp:
             # Удаление временного файла, если он был создан
             if temp_file_path and os.path.exists(temp_file_path):
                 os.unlink(temp_file_path)
-
 
 if __name__ == "__main__":
     root = tk.Tk()
