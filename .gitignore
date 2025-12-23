@@ -12,3 +12,17 @@ wheels/
 
 data
 test
+
+# Testing
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.cover
+.hypothesis/
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
