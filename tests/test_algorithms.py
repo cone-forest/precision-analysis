@@ -10,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from utils import compose, euler_ZYX_to_R, invert_T
 from tsai_lenz import tsai_lenz
+from park_martin import park_martin
 
 
 @pytest.fixture
@@ -71,5 +72,28 @@ class TestTsaiLenz:
         np.testing.assert_array_almost_equal(RY @ RY.T, np.eye(3))
         
         # Determinant should be 1
+        assert abs(np.linalg.det(RX) - 1.0) < 1e-10
+        assert abs(np.linalg.det(RY) - 1.0) < 1e-10
+
+
+class TestParkMartin:
+    """Tests for park-martin algorithm"""
+    
+    def test_park_martin_returns_transforms(self, simple_poses):
+        """Test that park_martin returns two transformation matrices"""
+        X, Y = park_martin(simple_poses, simple_poses)
+        assert X.shape == (4, 4)
+        assert Y.shape == (4, 4)
+        assert X[3, 3] == 1.0
+        assert Y[3, 3] == 1.0
+    
+    def test_park_martin_rotation_properties(self, simple_poses):
+        """Test that returned rotations have correct properties"""
+        X, Y = park_martin(simple_poses, simple_poses)
+        RX = X[:3, :3]
+        RY = Y[:3, :3]
+        
+        np.testing.assert_array_almost_equal(RX @ RX.T, np.eye(3))
+        np.testing.assert_array_almost_equal(RY @ RY.T, np.eye(3))
         assert abs(np.linalg.det(RX) - 1.0) < 1e-10
         assert abs(np.linalg.det(RY) - 1.0) < 1e-10
