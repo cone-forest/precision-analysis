@@ -12,6 +12,7 @@ from utils import compose, euler_ZYX_to_R, invert_T
 from tsai_lenz import tsai_lenz
 from park_martin import park_martin
 from daniilidis import daniilidis
+from li_wang_wu import li_wang_wu
 
 
 @pytest.fixture
