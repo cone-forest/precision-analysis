@@ -1,0 +1,76 @@
+Algorithm,Dataset,Noise Level,Translation Threshold (mm),Rotation Threshold (deg)
+tsai-lenz,Known Transform,0.1mm,1.28,0.53
+tsai-lenz,Known Transform,1.0mm,1.86,0.54
+tsai-lenz,Known Transform,5.0mm,4.72,0.45
+tsai-lenz,Circular Trajectory,0.1mm,1.59,0.60
+tsai-lenz,Circular Trajectory,1.0mm,2.16,0.58
+tsai-lenz,Circular Trajectory,5.0mm,4.80,0.52
+tsai-lenz,Helix Trajectory,0.1mm,20.21,4.50
+tsai-lenz,Helix Trajectory,1.0mm,18.45,4.39
+tsai-lenz,Helix Trajectory,5.0mm,20.32,4.28
+tsai-lenz,Complex 3D Path,0.1mm,25.83,7.94
+tsai-lenz,Complex 3D Path,1.0mm,25.68,7.25
+tsai-lenz,Complex 3D Path,5.0mm,25.16,7.43
+tsai-lenz,Figure8 Trajectory,0.1mm,12.19,3.13
+tsai-lenz,Figure8 Trajectory,1.0mm,10.78,3.17
+tsai-lenz,Figure8 Trajectory,5.0mm,14.26,3.38
+park-martin,Known Transform,0.1mm,38.77,72.66
+park-martin,Known Transform,1.0mm,1.85,0.55
+park-martin,Known Transform,5.0mm,4.72,0.45
+park-martin,Circular Trajectory,0.1mm,1.59,0.60
+park-martin,Circular Trajectory,1.0mm,2.16,0.58
+park-martin,Circular Trajectory,5.0mm,4.80,0.52
+park-martin,Helix Trajectory,0.1mm,1.36,0.58
+park-martin,Helix Trajectory,1.0mm,2.01,0.58
+park-martin,Helix Trajectory,5.0mm,5.82,0.59
+park-martin,Complex 3D Path,0.1mm,1.24,0.58
+park-martin,Complex 3D Path,1.0mm,1.98,0.58
+park-martin,Complex 3D Path,5.0mm,5.88,0.59
+park-martin,Figure8 Trajectory,0.1mm,1.23,0.58
+park-martin,Figure8 Trajectory,1.0mm,1.98,0.58
+park-martin,Figure8 Trajectory,5.0mm,5.81,0.59
+daniilidis,Known Transform,0.1mm,1.22,0.81
+daniilidis,Known Transform,1.0mm,2.23,2.18
+daniilidis,Known Transform,5.0mm,8.06,7.23
+daniilidis,Circular Trajectory,0.1mm,2.70,0.87
+daniilidis,Circular Trajectory,1.0mm,12.74,9.34
+daniilidis,Circular Trajectory,5.0mm,3441.90,102.42
+daniilidis,Helix Trajectory,0.1mm,4.01,0.83
+daniilidis,Helix Trajectory,1.0mm,300.45,55.13
+daniilidis,Helix Trajectory,5.0mm,4097.92,121.29
+daniilidis,Complex 3D Path,0.1mm,2.08,0.61
+daniilidis,Complex 3D Path,1.0mm,106.97,9.66
+daniilidis,Complex 3D Path,5.0mm,2824.77,75.08
+daniilidis,Figure8 Trajectory,0.1mm,1.91,0.59
+daniilidis,Figure8 Trajectory,1.0mm,62.69,2.55
+daniilidis,Figure8 Trajectory,5.0mm,1533.58,59.09
+li-wang-wu,Known Transform,0.1mm,2.44,0.56
+li-wang-wu,Known Transform,1.0mm,31.59,4.44
+li-wang-wu,Known Transform,5.0mm,120.37,18.96
+li-wang-wu,Circular Trajectory,0.1mm,364.97,0.60
+li-wang-wu,Circular Trajectory,1.0mm,364.96,0.60
+li-wang-wu,Circular Trajectory,5.0mm,365.59,0.58
+li-wang-wu,Helix Trajectory,0.1mm,1.10,0.58
+li-wang-wu,Helix Trajectory,1.0mm,1.98,0.58
+li-wang-wu,Helix Trajectory,5.0mm,6.35,0.59
+li-wang-wu,Complex 3D Path,0.1mm,1.10,0.58
+li-wang-wu,Complex 3D Path,1.0mm,1.97,0.58
+li-wang-wu,Complex 3D Path,5.0mm,5.82,0.58
+li-wang-wu,Figure8 Trajectory,0.1mm,1.10,0.58
+li-wang-wu,Figure8 Trajectory,1.0mm,1.97,0.58
+li-wang-wu,Figure8 Trajectory,5.0mm,5.84,0.59
+shah,Known Transform,0.1mm,1.13,0.51
+shah,Known Transform,1.0mm,1.80,0.53
+shah,Known Transform,5.0mm,4.64,0.45
+shah,Circular Trajectory,0.1mm,1.55,2.49
+shah,Circular Trajectory,1.0mm,2.03,0.57
+shah,Circular Trajectory,5.0mm,4.73,0.52
+shah,Helix Trajectory,0.1mm,1.18,0.58
+shah,Helix Trajectory,1.0mm,1.98,0.58
+shah,Helix Trajectory,5.0mm,5.79,0.58
+shah,Complex 3D Path,0.1mm,1.13,0.58
+shah,Complex 3D Path,1.0mm,1.97,0.58
+shah,Complex 3D Path,5.0mm,5.79,0.58
+shah,Figure8 Trajectory,0.1mm,1.12,0.58
+shah,Figure8 Trajectory,1.0mm,1.97,0.58
+shah,Figure8 Trajectory,5.0mm,5.79,0.58
